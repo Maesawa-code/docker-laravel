@@ -20,3 +20,5 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/inventories', [App\Http\Controllers\InventoryController::class, 'index'])->name('inventories.index');
+Route::post('/products/register', [App\Http\Controllers\ProductController::class, 'register'])->name('products.register');
+Route::get('/products/register', [App\Http\Controllers\ProductController::class, 'registerForm'])->name('products.registerForm');
