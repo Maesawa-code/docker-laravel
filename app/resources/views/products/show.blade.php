@@ -18,7 +18,7 @@
 
                 <div class="d-flex justify-content-center gap-3 mb-4">
                     <!-- 編集ボタン -->
-                    <a href="#" class="btn btn-success fw-bold">編集</a>
+                    <a href="{{ route('products.edit', $product->id) }}" class="btn btn-success fw-bold">編集</a>
 
                     <!-- 削除ボタン -->
                     <form action="#" method="POST" onsubmit="return confirm('本当に削除しますか？')">
