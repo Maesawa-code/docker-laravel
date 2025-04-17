@@ -27,7 +27,7 @@
             </a>
         </div>
         <div class="col-md-4">
-            <a href="#" class="btn btn-warning text-dark fw-bold fs-3 py-5 w-100">
+            <a href="{{ route('products.index') }}" class="btn btn-warning text-dark fw-bold fs-3 py-5 w-100">
                 商品一覧
             </a>
         </div>

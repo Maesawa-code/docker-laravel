@@ -30,4 +30,10 @@ class ProductController extends Controller
     {
         return view('products.register');
     }
+
+    public function index()
+    {
+        $products = Product::whereNull('deleted_at')->get();
+        return view('products.index', compact('products'));
+    }
 }
