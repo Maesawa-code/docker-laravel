@@ -36,4 +36,10 @@ class ProductController extends Controller
         $products = Product::whereNull('deleted_at')->get();
         return view('products.index', compact('products'));
     }
+
+    public function show($id)
+    {
+        $product = Product::findOrFail($id);
+        return view('products.show', compact('product'));
+    }
 }
