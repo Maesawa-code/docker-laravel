@@ -10,7 +10,7 @@ class UserController extends Controller
 {
     public function index()
     {
-        $users = User::with('store')->where('role', 'staff')->get();
+        $users = User::with('store')->where('role', 'staff')->whereNull('deleted_at')->get();
         return view('users.index', compact('users'));
     }
 
@@ -37,5 +37,13 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('users.index')->with('success', '社員を登録しました');
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('users.index')->with('success', '社員を削除しました');
     }
 }

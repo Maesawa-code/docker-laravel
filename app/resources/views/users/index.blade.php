@@ -20,7 +20,7 @@
                     <div class="fs-3 fw-bold d-flex align-items-center">
                         店舗名：{{ $user->store->name ?? '未登録' }}
                         <!-- 削除ボタン -->
-                        <form action="#" method="POST" class="ms-3" onsubmit="return confirm('この社員を削除してもよろしいですか？')">
+                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" class="ms-3" onsubmit="return confirm('この社員を削除してもよろしいですか？')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm fw-bold">削除</button>
