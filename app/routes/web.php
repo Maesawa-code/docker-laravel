@@ -28,3 +28,5 @@ Route::get('/products/{id}/edit', [App\Http\Controllers\ProductController::class
 Route::put('/products/{id}', [App\Http\Controllers\ProductController::class, 'update'])->name('products.update');
 Route::delete('/products/{id}', [App\Http\Controllers\ProductController::class, 'destroy'])->name('products.destroy');
 Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+Route::get('/users/register', [App\Http\Controllers\UserController::class, 'create'])->name('users.register.form');
+Route::post('/users/register', [App\Http\Controllers\UserController::class, 'register'])->name('users.register');

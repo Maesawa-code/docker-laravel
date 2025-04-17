@@ -6,7 +6,7 @@
 
     <!-- 社員登録ボタン -->
     <div class="text-center mb-5">
-        <a href="#" class="btn btn-success fw-bold px-4 py-2">
+        <a href="{{ route('users.register.form') }}" class="btn btn-success fw-bold px-4 py-2">
             ＋ 社員を登録する
         </a>
     </div>
