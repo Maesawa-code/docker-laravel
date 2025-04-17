@@ -22,7 +22,7 @@
 
     <div class="row g-5 justify-content-start mt-2">
         <div class="col-md-4">
-            <a href="#" class="btn btn-warning text-dark fw-bold fs-3 py-5 w-100">
+            <a href="{{ route('users.index') }}" class="btn btn-warning text-dark fw-bold fs-3 py-5 w-100">
                 社員
             </a>
         </div>

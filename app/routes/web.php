@@ -27,3 +27,4 @@ Route::get('/products/{id}', [App\Http\Controllers\ProductController::class, 'sh
 Route::get('/products/{id}/edit', [App\Http\Controllers\ProductController::class, 'edit'])->name('products.edit');
 Route::put('/products/{id}', [App\Http\Controllers\ProductController::class, 'update'])->name('products.update');
 Route::delete('/products/{id}', [App\Http\Controllers\ProductController::class, 'destroy'])->name('products.destroy');
+Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->name('users.index');

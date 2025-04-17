@@ -15,12 +15,19 @@
 
     <!-- Font Awesome (for home icon) -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-</head>
-<body class="d-flex flex-column min-vh-100">
 
-    <!-- ヘッダー -->
-    <header class="bg-info text-white py-2 px-4 shadow-sm">
-        <div class="container d-flex justify-content-between align-items-center">
+    <style>
+        body {
+            padding-top: 10vh;
+            padding-bottom: 10vh;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ヘッダー（固定） -->
+    <header class="bg-info text-white py-2 px-4 shadow-sm position-fixed top-0 w-100" style="height: 10vh; z-index: 1030;">
+        <div class="container d-flex justify-content-between align-items-center h-100">
             <div></div>
             <h2 class="m-0 text-center flex-grow-1 text-white">在庫管理アプリ</h2>
             <div class="text-end">
@@ -39,15 +46,15 @@
     </header>
 
     <!-- メイン -->
-    <main class="container flex-grow-1 py-4">
+    <main class="container py-4">
         @yield('content')
     </main>
 
-    <!-- フッター -->
-    <footer class="bg-info py-3 mt-auto shadow-sm">
+    <!-- フッター（固定） -->
+    <footer class="bg-info py-3 position-fixed bottom-0 w-100 shadow-sm" style="height: 10vh; z-index: 1030;">
         <div class="text-center">
             <a href="{{ route('home') }}" class="text-white">
-                <i class="fas fa-home fa-lg"></i>
+                <i class="fas fa-home fa-3x"></i>
             </a>
         </div>
     </footer>
