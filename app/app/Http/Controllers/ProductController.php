@@ -70,7 +70,14 @@ class ProductController extends Controller
 
         return redirect()->route('products.show', $product->id)->with('success', '商品を更新しました！');
     }
-    
+
+    public function destroy($id)
+    {
+        $product = Product::findOrFail($id);
+        $product->delete();
+        
+        return redirect()->route('products.index')->with('success', '商品を削除しました！');
+    }
     
     
     
