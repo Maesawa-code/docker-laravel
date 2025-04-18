@@ -10,7 +10,7 @@ class ProductController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'product_name' => 'required|string|max:255',
             'weight' => 'required|numeric|min:0',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -18,7 +18,7 @@ class ProductController extends Controller
         $imagePath = $request->file('image')->store('products', 'public');
 
         Product::create([
-            'name' => $request->name,
+            'product_name' => $request->product_name,
             'weight' => $request->weight,
             'image_path' => $imagePath,
         ]);
@@ -52,7 +52,7 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'product_name' => 'required|string|max:255',
             'weight' => 'required|numeric|min:0',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -64,7 +64,7 @@ class ProductController extends Controller
             $product->image_path = $imagePath;
         }
 
-        $product->name = $request->name;
+        $product->product_name = $request->product_name;
         $product->weight = $request->weight;
         $product->save();
 
