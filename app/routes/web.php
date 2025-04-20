@@ -38,3 +38,4 @@ Route::get('/incoming-plans/{id}/edit', [App\Http\Controllers\IncomingPlanContro
 Route::put('/incoming-plans/{id}', [App\Http\Controllers\IncomingPlanController::class, 'update'])->name('incoming-plans.update');
 Route::get('/incoming-plans/{date}/{store}', [App\Http\Controllers\IncomingPlanController::class, 'show'])->name('incoming-plans.show');
 Route::delete('/incoming-plans/{id}', [App\Http\Controllers\IncomingPlanController::class, 'destroy'])->name('incoming-plans.destroy');
+Route::post('/incoming-plans/{id}/confirm', [App\Http\Controllers\IncomingPlanController::class, 'confirm'])->name('incoming-plans.confirm');

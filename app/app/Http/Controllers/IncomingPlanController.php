@@ -97,4 +97,15 @@ class IncomingPlanController extends Controller
         return redirect()->route('incoming-plans.show', ['date' => $plan->planned_date, 'store' => $plan->store_id])
             ->with('success', '入荷予定を削除しました');
     }
+
+    public function confirm($id)
+    {
+        $plan = IncomingPlan::findOrFail($id);
+
+        IncomingPlan::whereDate('planned_date', $plan->planned_date)
+            ->where('store_id', $plan->store_id)
+            ->update(['is_confirmed' => true]);
+
+        return redirect()->route('incoming-plans.index')->with('success', '入荷予定を確定しました');
+    }
 }
