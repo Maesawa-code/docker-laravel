@@ -31,3 +31,4 @@ Route::get('/users', [App\Http\Controllers\UserController::class, 'index'])->nam
 Route::get('/users/register', [App\Http\Controllers\UserController::class, 'create'])->name('users.register.form');
 Route::post('/users/register', [App\Http\Controllers\UserController::class, 'register'])->name('users.register');
 Route::delete('/users/{id}', [App\Http\Controllers\UserController::class, 'destroy'])->name('users.destroy');
+Route::get('/incoming-plans', [App\Http\Controllers\IncomingPlanController::class, 'index'])->name('incoming-plans.index');
