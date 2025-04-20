@@ -51,4 +51,20 @@ class IncomingPlanController extends Controller
 
         return redirect()->route('incoming-plans.index')->with('success', '入荷予定を登録しました');
     }
+
+    public function show($date, $store_id)
+    {
+        $plans = IncomingPlan::with('product', 'store')
+            ->whereDate('planned_date', $date)
+            ->where('store_id', $store_id)
+            ->get();
+
+        $store = Store::findOrFail($store_id);
+
+        return view('incoming_plans.show', [
+            'plans' => $plans,
+            'date' => $date,
+            'store' => $store,
+        ]);
+    }
 }

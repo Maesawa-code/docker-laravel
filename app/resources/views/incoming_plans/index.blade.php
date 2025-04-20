@@ -21,8 +21,9 @@
                         </div>
 
                         <div>
-                            <!-- 詳細ページ未実装なら一旦 "#" にしておく -->
-                            <a href="#" class="btn btn-primary fw-bold">詳細を見る</a>
+                            <a href="{{ route('incoming-plans.show', ['date' => $date, 'store' => $plans->first()->store_id]) }}" class="btn btn-primary fw-bold">
+                                詳細を見る
+                            </a>
                         </div>
                     </div>
                 </div>

@@ -34,3 +34,4 @@ Route::delete('/users/{id}', [App\Http\Controllers\UserController::class, 'destr
 Route::get('/incoming-plans', [App\Http\Controllers\IncomingPlanController::class, 'index'])->name('incoming-plans.index');
 Route::get('/incoming-plans/register', [App\Http\Controllers\IncomingPlanController::class, 'registerForm'])->name('incoming-plans.register.form');
 Route::post('/incoming-plans/register', [App\Http\Controllers\IncomingPlanController::class, 'register'])->name('incoming-plans.register');
+Route::get('/incoming-plans/{date}/{store}', [App\Http\Controllers\IncomingPlanController::class, 'show'])->name('incoming-plans.show');
