@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\IncomingPlan;
 use App\Store;
 use App\Product;
+use App\Inventory;
 use Illuminate\Support\Facades\Auth;
 
 class IncomingPlanController extends Controller
@@ -100,12 +101,38 @@ class IncomingPlanController extends Controller
 
     public function confirm($id)
     {
-        $plan = IncomingPlan::findOrFail($id);
+        $targetPlan = IncomingPlan::findOrFail($id);
 
-        IncomingPlan::whereDate('planned_date', $plan->planned_date)
-            ->where('store_id', $plan->store_id)
-            ->update(['is_confirmed' => true]);
+        $plans = IncomingPlan::whereDate('planned_date', $targetPlan->planned_date)
+            ->where('store_id', $targetPlan->store_id)
+            ->get();
 
-        return redirect()->route('incoming-plans.index')->with('success', '入荷予定を確定しました');
+        foreach ($plans as $plan) {
+            if ($plan->is_confirmed) {
+            continue;
+        }
+
+        $inventory = Inventory::where('store_id', $plan->store_id)
+            ->where('product_id', $plan->product_id)
+            ->first();
+
+        if ($inventory) {
+            $inventory->quantity += $plan->quantity;
+            $inventory->weight += $plan->weight;
+            $inventory->save();
+        } else {
+            Inventory::create([
+                'store_id' => $plan->store_id,
+                'product_id' => $plan->product_id,
+                'quantity' => $plan->quantity,
+                'weight' => $plan->weight,
+            ]);
+        }
+
+        $plan->is_confirmed = true;
+        $plan->save();
+        }
+
+        return back()->with('success', '入荷を確定し、在庫に反映しました');
     }
 }

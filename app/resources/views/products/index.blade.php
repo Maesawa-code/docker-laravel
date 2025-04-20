@@ -24,7 +24,7 @@
 
                         <!-- 商品情報 -->
                         <div class="text-dark">
-                            <h5 class="fw-bold mb-2">{{ $product->name }}</h5>
+                            <h5 class="fw-bold mb-2">{{ $product->product_name }}</h5>
                             <p class="mb-0">重さ：{{ $product->weight }} kg</p>
                         </div>
                     </div>
