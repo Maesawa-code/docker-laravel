@@ -26,7 +26,7 @@
                     <div class="bg-warning p-4 rounded shadow text-dark d-flex justify-content-between align-items-center">
                         <!-- 日付と店舗 -->
                         <div class="fs-4 fw-bold">
-                            入荷予定登録日：{{ \Carbon\Carbon::parse($date)->format('Y年m月d日') }}（{{ $storeName }}）
+                            入荷予定日：{{ \Carbon\Carbon::parse($date)->format('Y年m月d日') }}（{{ $storeName }}）
                         </div>
 
                         <!-- 確定バッジと詳細ボタン -->

@@ -38,13 +38,14 @@ class IncomingPlanController extends Controller
 
         $plans = json_decode($request->plans, true);
         $storeId = Auth::user()->store_id;
-        $today = now()->toDateString();
+
+        $plannedDate = now()->addDays(3)->toDateString();
 
         foreach ($plans as $plan) {
             IncomingPlan::create([
                 'store_id' => $storeId,
                 'product_id' => $plan['product_id'],
-                'planned_date' => $today,
+                'planned_date' => $plannedDate,
                 'quantity' => $plan['quantity'],
                 'weight' => $plan['weight'],
             ]);
@@ -109,28 +110,28 @@ class IncomingPlanController extends Controller
 
         foreach ($plans as $plan) {
             if ($plan->is_confirmed) {
-            continue;
-        }
+                continue;
+            }
 
-        $inventory = Inventory::where('store_id', $plan->store_id)
-            ->where('product_id', $plan->product_id)
-            ->first();
+            $inventory = Inventory::where('store_id', $plan->store_id)
+                ->where('product_id', $plan->product_id)
+                ->first();
 
-        if ($inventory) {
-            $inventory->quantity += $plan->quantity;
-            $inventory->weight += $plan->weight;
-            $inventory->save();
-        } else {
-            Inventory::create([
-                'store_id' => $plan->store_id,
-                'product_id' => $plan->product_id,
-                'quantity' => $plan->quantity,
-                'weight' => $plan->weight,
-            ]);
-        }
+            if ($inventory) {
+                $inventory->quantity += $plan->quantity;
+                $inventory->weight += $plan->weight;
+                $inventory->save();
+            } else {
+                Inventory::create([
+                    'store_id' => $plan->store_id,
+                    'product_id' => $plan->product_id,
+                    'quantity' => $plan->quantity,
+                    'weight' => $plan->weight,
+                ]);
+            }
 
-        $plan->is_confirmed = true;
-        $plan->save();
+            $plan->is_confirmed = true;
+            $plan->save();
         }
 
         return back()->with('success', '入荷を確定し、在庫に反映しました');

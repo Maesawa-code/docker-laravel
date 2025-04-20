@@ -3,7 +3,7 @@
 @section('content')
 <div class="container py-5">
     <h2 class="mb-4 fw-bold text-center">
-        入荷予定登録日：{{ \Carbon\Carbon::parse($date)->format('Y年m月d日') }}（{{ $store->name }}）
+        入荷予定日：{{ \Carbon\Carbon::parse($date)->format('Y年m月d日') }}（{{ $store->name }}）
     </h2>
 
     <!-- 一括確定ボタン（未確定のものが含まれている場合のみ表示） -->
