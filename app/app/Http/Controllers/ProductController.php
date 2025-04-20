@@ -23,7 +23,7 @@ class ProductController extends Controller
             'image_path' => $imagePath,
         ]);
 
-        return redirect()->route('home')->with('success', '商品を登録しました');
+        return redirect()->route('products.index')->with('success', '商品を登録しました');
     }
 
     public function registerForm()

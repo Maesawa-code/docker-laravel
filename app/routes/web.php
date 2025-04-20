@@ -32,3 +32,5 @@ Route::get('/users/register', [App\Http\Controllers\UserController::class, 'crea
 Route::post('/users/register', [App\Http\Controllers\UserController::class, 'register'])->name('users.register');
 Route::delete('/users/{id}', [App\Http\Controllers\UserController::class, 'destroy'])->name('users.destroy');
 Route::get('/incoming-plans', [App\Http\Controllers\IncomingPlanController::class, 'index'])->name('incoming-plans.index');
+Route::get('/incoming-plans/register', [App\Http\Controllers\IncomingPlanController::class, 'registerForm'])->name('incoming-plans.register.form');
+Route::post('/incoming-plans/register', [App\Http\Controllers\IncomingPlanController::class, 'register'])->name('incoming-plans.register');
