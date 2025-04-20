@@ -42,7 +42,7 @@
                 <!-- 商品ごとの操作ボタン -->
                 <div class="d-flex gap-2">
                     <a href="{{ route('incoming-plans.edit', $plan->id) }}" class="btn btn-primary">編集</a>
-                    <form action="#" method="POST" onsubmit="return confirm('この商品を削除してもよろしいですか？')">
+                    <form action="{{ route('incoming-plans.destroy', $plan->id) }}" method="POST" onsubmit="return confirm('この商品を削除してもよろしいですか？')">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">削除</button>
