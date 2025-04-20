@@ -67,4 +67,25 @@ class IncomingPlanController extends Controller
             'store' => $store,
         ]);
     }
+
+    public function edit($id)
+    {
+        $plan = IncomingPlan::with('product')->findOrFail($id);
+        return view('incoming_plans.edit', compact('plan'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
+
+        $plan = IncomingPlan::findOrFail($id);
+        $plan->quantity = $request->quantity;
+        $plan->weight = $plan->product->weight * $request->quantity;
+        $plan->save();
+
+        return redirect()->route('incoming-plans.show', ['date' => $plan->planned_date, 'store' => $plan->store_id])
+            ->with('success', '数量を更新しました');
+    }
 }

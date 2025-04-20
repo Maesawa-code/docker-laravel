@@ -3,7 +3,7 @@
 @section('content')
 <div class="container py-5">
     <h2 class="mb-4 fw-bold text-center">
-        入荷予定日：{{ \Carbon\Carbon::parse($date)->format('Y年m月d日') }}（{{ $store->name }}）
+        入荷予定登録日：{{ \Carbon\Carbon::parse($date)->format('Y年m月d日') }}（{{ $store->name }}）
     </h2>
 
     <!-- 一括確定ボタン -->
@@ -41,7 +41,7 @@
 
                 <!-- 商品ごとの操作ボタン -->
                 <div class="d-flex gap-2">
-                    <a href="#" class="btn btn-primary">編集</a>
+                    <a href="{{ route('incoming-plans.edit', $plan->id) }}" class="btn btn-primary">編集</a>
                     <form action="#" method="POST" onsubmit="return confirm('この商品を削除してもよろしいですか？')">
                         @csrf
                         @method('DELETE')
