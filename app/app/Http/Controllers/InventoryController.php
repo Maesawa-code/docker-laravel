@@ -8,8 +8,10 @@ use App\IncomingPlan;
 
 class InventoryController extends Controller
 {
+    // 自店舗のみの在庫一覧
     public function index(Request $request)
     {
+        $keyword = null; 
         $query = Inventory::with(['product', 'store'])->whereNull('deleted_at');
 
         if ($request->filled('keyword')) {
@@ -26,9 +28,10 @@ class InventoryController extends Controller
 
         $inventories = $query->orderBy('id', 'desc')->get();
 
-        return view('inventories.index', compact('inventories'));
+        return view('inventories.index', compact('inventories', 'keyword'));
     }
 
+    // 在庫の削除
     public function destroy($id)
     {
         $inventory = Inventory::findOrFail($id);
@@ -37,9 +40,26 @@ class InventoryController extends Controller
         return redirect()->route('inventories.index')->with('success', '在庫を削除しました');
     }
 
-    public function all()
+    // 全店舗の在庫一覧（検索対応版）
+    public function all(Request $request)
     {
-        $inventories = Inventory::with(['product', 'store'])->get();
-        return view('inventories.all', compact('inventories'));
+        $keyword = null;
+        $query = Inventory::with(['product', 'store']);
+
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+
+            $query->where(function ($q) use ($keyword) {
+                $q->whereHas('product', function ($q2) use ($keyword) {
+                    $q2->where('product_name', 'LIKE', "%{$keyword}%");
+                })->orWhereHas('store', function ($q2) use ($keyword) {
+                    $q2->where('name', 'LIKE', "%{$keyword}%");
+                });
+            });
+        }
+
+        $inventories = $query->orderBy('id', 'desc')->get();
+
+        return view('inventories.all', compact('inventories', 'keyword'));
     }
 }

@@ -4,6 +4,14 @@
 <div class="container py-5">
     <h2 class="mb-4 fw-bold text-center">在庫一覧（全店舗）</h2>
 
+    <!-- 検索フォーム -->
+    <div class="text-center mb-4">
+        <form method="GET" action="{{ route('inventories.all') }}" class="d-flex justify-content-center gap-2">
+            <input type="text" name="keyword" value="{{ old('keyword', $keyword ?? '') }}" class="form-control w-50" placeholder="商品名または店舗名で検索">
+            <button type="submit" class="btn btn-primary fw-bold px-4" style="white-space: nowrap;">検索</button>
+        </form>
+    </div>
+
     <div class="row row-cols-1 row-cols-md-3 g-4">
         @foreach($inventories as $inventory)
             <div class="col">
