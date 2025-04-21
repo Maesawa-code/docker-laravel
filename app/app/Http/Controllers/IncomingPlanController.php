@@ -11,10 +11,27 @@ use Illuminate\Support\Facades\Auth;
 
 class IncomingPlanController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $incomingPlanGroups = IncomingPlan::with('store', 'product')
-            ->orderBy('planned_date', 'desc')
+        $query = IncomingPlan::with('store', 'product');
+
+        if ($request->filled('keyword')) {
+            $keyword = $request->keyword;
+
+            $query->where(function ($q) use ($keyword) {
+                $q->whereHas('product', function ($q2) use ($keyword) {
+                    $q2->where('product_name', 'like', "%{$keyword}%");
+                })->orWhereHas('store', function ($q2) use ($keyword) {
+                    $q2->where('name', 'like', "%{$keyword}%");
+                });
+            });
+        }
+
+        if ($request->filled('date')) {
+            $query->whereDate('planned_date', '>=', $request->date);
+        }
+
+        $incomingPlanGroups = $query->orderBy('planned_date', 'desc')
             ->get()
             ->groupBy(function ($plan) {
                 return $plan->planned_date . '_' . $plan->store->name;
@@ -38,7 +55,6 @@ class IncomingPlanController extends Controller
 
         $plans = json_decode($request->plans, true);
         $storeId = Auth::user()->store_id;
-
         $plannedDate = now()->addDays(3)->toDateString();
 
         foreach ($plans as $plan) {

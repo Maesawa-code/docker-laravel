@@ -4,11 +4,29 @@
 <div class="container py-5">
     <h2 class="mb-4 fw-bold text-center">入荷予定一覧</h2>
 
-    <!-- 入荷予定登録ボタン（中央） -->
-    <div class="text-center mb-4">
-        <a href="{{ route('incoming-plans.register.form') }}" class="btn btn-success fw-bold">
-            + 入荷予定を登録する
-        </a>
+    <!-- 入荷予定登録ボタン & 検索フォーム（横並び） -->
+    <div class="row align-items-center mb-4">
+        <!-- 登録ボタン -->
+        <div class="col-md-4 text-center mb-2 mb-md-0">
+            <a href="{{ route('incoming-plans.register.form') }}" class="btn btn-success fw-bold w-100">
+                + 入荷予定を登録する
+            </a>
+        </div>
+
+        <!-- 検索フォーム -->
+        <div class="col-md-8">
+            <form method="GET" action="{{ route('incoming-plans.index') }}" class="row g-2">
+                <div class="col-md-6">
+                    <input type="text" name="keyword" class="form-control" placeholder="商品名・店舗名" value="{{ request('keyword') }}">
+                </div>
+                <div class="col-md-4">
+                    <input type="date" name="date" class="form-control" value="{{ request('date') }}">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary fw-bold w-100">検索</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     @if ($incomingPlanGroups->isEmpty())
@@ -29,7 +47,7 @@
                             入荷予定日：{{ \Carbon\Carbon::parse($date)->format('Y年m月d日') }}（{{ $storeName }}）
                         </div>
 
-                        <!-- 確定バッジと詳細ボタン -->
+                        <!-- 確定済みバッジと詳細ボタン -->
                         <div class="d-flex align-items-center gap-3">
                             @if ($plans->every(fn($plan) => $plan->is_confirmed))
                                 <div class="btn btn-success fs-5 fw-bold disabled" style="pointer-events: none;">
