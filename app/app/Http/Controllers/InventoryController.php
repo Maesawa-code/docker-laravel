@@ -21,4 +21,10 @@ class InventoryController extends Controller
 
         return redirect()->route('inventories.index')->with('success', '在庫を削除しました');
     }
+
+    public function all()
+    {
+        $inventories = Inventory::with('product', 'store')->get();
+        return view('inventories.all', compact('inventories'));
+    }
 }

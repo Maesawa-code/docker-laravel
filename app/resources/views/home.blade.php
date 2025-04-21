@@ -14,7 +14,7 @@
             </a>
         </div>
         <div class="col-md-4">
-            <a href="#" class="btn btn-warning text-dark fw-bold fs-3 py-5 w-100">
+            <a href="{{ route('inventories.all') }}" class="btn btn-warning text-dark fw-bold fs-3 py-5 w-100">
                 在庫一覧（全店舗）
             </a>
         </div>

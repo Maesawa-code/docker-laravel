@@ -40,3 +40,4 @@ Route::get('/incoming-plans/{date}/{store}', [App\Http\Controllers\IncomingPlanC
 Route::delete('/incoming-plans/{id}', [App\Http\Controllers\IncomingPlanController::class, 'destroy'])->name('incoming-plans.destroy');
 Route::post('/incoming-plans/{id}/confirm', [App\Http\Controllers\IncomingPlanController::class, 'confirm'])->name('incoming-plans.confirm');
 Route::delete('/inventories/{id}', [App\Http\Controllers\InventoryController::class, 'destroy'])->name('inventories.destroy');
+Route::get('/inventories/all', [App\Http\Controllers\InventoryController::class, 'all'])->name('inventories.all');
