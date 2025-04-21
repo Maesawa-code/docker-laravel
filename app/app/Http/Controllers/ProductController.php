@@ -31,10 +31,17 @@ class ProductController extends Controller
         return view('products.register');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::whereNull('deleted_at')->get();
-        return view('products.index', compact('products'));
+        $keyword = $request->input('keyword');
+
+        $products = Product::whereNull('deleted_at')
+            ->when($keyword, function ($query, $keyword) {
+                $query->where('product_name', 'like', "%{$keyword}%");
+            })
+        ->get();
+
+        return view('products.index', compact('products', 'keyword'));
     }
 
     public function show($id)

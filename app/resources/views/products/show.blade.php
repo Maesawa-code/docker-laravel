@@ -13,7 +13,7 @@
 
             <!-- 商品情報 -->
             <div class="col-md-6">
-                <h2 class="fw-bold mb-3">{{ $product->name }}</h2>
+                <h2 class="fw-bold mb-3">{{ $product->product_name }}</h2>
                 <h4 class="mb-4">重さ：{{ $product->weight }} kg</h4>
 
                 <div class="d-flex justify-content-center gap-3 mb-4">

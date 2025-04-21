@@ -3,9 +3,16 @@
 @section('content')
 <div class="container py-5">
     <h2 class="mb-4 fw-bold text-center">商品一覧</h2>
-    
-    <!-- 登録ボタン -->
-    <div class="text-center mb-5">
+
+    <!-- 検索フォーム & 登録ボタン（横並び） -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <form method="GET" action="{{ route('products.index') }}" class="d-flex align-items-center w-75 gap-2">
+            <input type="text" name="keyword" class="form-control" placeholder="商品名" value="{{ old('keyword', $keyword ?? '') }}">
+            <button type="submit" class="btn btn-primary fw-bold px-4 py-2" style="white-space: nowrap;">
+                検索
+            </button>
+        </form>
+
         <a href="{{ url('/products/register') }}" class="btn btn-success fw-bold px-4 py-2">
             ＋ 商品を登録する
         </a>
@@ -25,7 +32,7 @@
                         <!-- 商品情報 -->
                         <div class="text-dark">
                             <h5 class="fw-bold mb-2">{{ $product->product_name }}</h5>
-                            <p class="mb-0">重さ：{{ $product->weight }} kg</p>
+                            <p class="mb-1">重さ：{{ $product->weight }} kg</p>
                         </div>
                     </div>
                 </a>
