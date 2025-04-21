@@ -17,7 +17,9 @@
         <div class="col-md-8">
             <form method="GET" action="{{ route('incoming-plans.index') }}" class="row g-2">
                 <div class="col-md-6">
-                    <input type="text" name="keyword" class="form-control" placeholder="商品名・店舗名" value="{{ request('keyword') }}">
+                    <input type="text" name="keyword" class="form-control"
+                        placeholder="{{ Auth::user()->role === 'admin' ? '商品名・店舗名' : '商品名' }}"
+                        value="{{ request('keyword') }}">
                 </div>
                 <div class="col-md-4">
                     <input type="date" name="date" class="form-control" value="{{ request('date') }}">
@@ -29,6 +31,10 @@
         </div>
     </div>
 
+    @php
+        $userStoreId = Auth::user()->store_id;
+    @endphp
+
     @if ($incomingPlanGroups->isEmpty())
         <div class="alert alert-info text-center fw-bold">
             現在、入荷予定はありません。
@@ -38,32 +44,35 @@
             @foreach ($incomingPlanGroups as $groupKey => $plans)
                 @php
                     [$date, $storeName] = explode('_', $groupKey);
+                    $storeId = $plans->first()->store_id;
                 @endphp
 
-                <div class="col">
-                    <div class="bg-warning p-4 rounded shadow text-dark d-flex justify-content-between align-items-center">
-                        <!-- 日付と店舗 -->
-                        <div class="fs-4 fw-bold">
-                            入荷予定日：{{ \Carbon\Carbon::parse($date)->format('Y年m月d日') }}（{{ $storeName }}）
-                        </div>
+                @if ($storeId == $userStoreId)
+                    <div class="col">
+                        <div class="bg-warning p-4 rounded shadow text-dark d-flex justify-content-between align-items-center">
+                            <!-- 日付と店舗 -->
+                            <div class="fs-4 fw-bold">
+                                入荷予定日：{{ \Carbon\Carbon::parse($date)->format('Y年m月d日') }}（{{ $storeName }}）
+                            </div>
 
-                        <!-- 確定済みバッジと詳細ボタン -->
-                        <div class="d-flex align-items-center gap-3">
-                            @if ($plans->every(fn($plan) => $plan->is_confirmed))
-                                <div class="btn btn-success fs-5 fw-bold disabled" style="pointer-events: none;">
-                                    ✅ 入荷確定済み
-                                </div>
-                            @endif
+                            <!-- 確定済みバッジと詳細ボタン -->
+                            <div class="d-flex align-items-center gap-3">
+                                @if ($plans->every(fn($plan) => $plan->is_confirmed))
+                                    <div class="btn btn-success fs-5 fw-bold disabled" style="pointer-events: none;">
+                                        ✅ 入荷確定済み
+                                    </div>
+                                @endif
 
-                            <a href="{{ route('incoming-plans.show', [
-                                'date' => $date,
-                                'store' => $plans->first()->store_id
-                            ]) }}" class="btn btn-primary fw-bold">
-                                詳細を見る
-                            </a>
+                                <a href="{{ route('incoming-plans.show', [
+                                    'date' => $date,
+                                    'store' => $storeId
+                                ]) }}" class="btn btn-primary fw-bold">
+                                    詳細を見る
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
             @endforeach
         </div>
     @endif

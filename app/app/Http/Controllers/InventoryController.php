@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Inventory;
 use App\IncomingPlan;
 
@@ -11,8 +12,12 @@ class InventoryController extends Controller
     // 自店舗のみの在庫一覧
     public function index(Request $request)
     {
-        $keyword = null; 
-        $query = Inventory::with(['product', 'store'])->whereNull('deleted_at');
+        $user = Auth::user(); // ログインユーザー取得
+        $keyword = null;
+
+        $query = Inventory::with(['product', 'store'])
+            ->where('store_id', $user->store_id)
+            ->whereNull('deleted_at');
 
         if ($request->filled('keyword')) {
             $keyword = $request->keyword;
@@ -61,5 +66,18 @@ class InventoryController extends Controller
         $inventories = $query->orderBy('id', 'desc')->get();
 
         return view('inventories.all', compact('inventories', 'keyword'));
+    }
+
+    public function show($id)
+    {
+        $inventory = Inventory::with(['product', 'store'])->findOrFail($id);
+
+        return response()->json([
+            'product_name' => $inventory->product->product_name,
+            'quantity' => $inventory->quantity,
+            'weight' => $inventory->weight,
+            'image_path' => $inventory->product->image_path,
+            'store_name' => optional($inventory->store)->name ?? '不明'
+        ]);
     }
 }

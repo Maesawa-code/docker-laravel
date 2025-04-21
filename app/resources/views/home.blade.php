@@ -3,6 +3,7 @@
 @section('content')
 <div class="container py-5">
     <div class="row g-5">
+        <!-- 上段3つ -->
         <div class="col-md-4">
             <a href="{{ route('inventories.index') }}" class="btn btn-warning text-dark fw-bold fs-3 py-5 w-100">
                 在庫一覧
@@ -13,24 +14,29 @@
                 入荷予定
             </a>
         </div>
-        <div class="col-md-4">
-            <a href="{{ route('inventories.all') }}" class="btn btn-warning text-dark fw-bold fs-3 py-5 w-100">
-                在庫一覧（全店舗）
-            </a>
-        </div>
-    </div>
-
-    <div class="row g-5 justify-content-start mt-2">
-        <div class="col-md-4">
-            <a href="{{ route('users.index') }}" class="btn btn-warning text-dark fw-bold fs-3 py-5 w-100">
-                社員
-            </a>
-        </div>
+        @if(Auth::user()->role === 'admin')
         <div class="col-md-4">
             <a href="{{ route('products.index') }}" class="btn btn-warning text-dark fw-bold fs-3 py-5 w-100">
                 商品一覧
             </a>
         </div>
+        @endif
+    </div>
+
+    <div class="row g-5 justify-content-start mt-2">
+        <!-- 下段（adminのみ） -->
+        @if(Auth::user()->role === 'admin')
+        <div class="col-md-4">
+            <a href="{{ route('inventories.all') }}" class="btn btn-warning text-dark fw-bold fs-3 py-5 w-100">
+                在庫一覧（全店舗）
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{{ route('users.index') }}" class="btn btn-warning text-dark fw-bold fs-3 py-5 w-100">
+                社員
+            </a>
+        </div>
+        @endif
     </div>
 </div>
 @endsection

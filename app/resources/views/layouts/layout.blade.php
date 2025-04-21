@@ -59,5 +59,8 @@
         </div>
     </footer>
 
+    {{-- ページ固有スクリプトの差し込み口 --}}
+    @yield('scripts')
+
 </body>
 </html>

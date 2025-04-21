@@ -13,7 +13,9 @@ class IncomingPlanController extends Controller
 {
     public function index(Request $request)
     {
-        $query = IncomingPlan::with('store', 'product');
+        $userStoreId = Auth::user()->store_id;
+
+        $query = IncomingPlan::with('store', 'product')->where('store_id', $userStoreId);
 
         if ($request->filled('keyword')) {
             $keyword = $request->keyword;
@@ -21,8 +23,6 @@ class IncomingPlanController extends Controller
             $query->where(function ($q) use ($keyword) {
                 $q->whereHas('product', function ($q2) use ($keyword) {
                     $q2->where('product_name', 'like', "%{$keyword}%");
-                })->orWhereHas('store', function ($q2) use ($keyword) {
-                    $q2->where('name', 'like', "%{$keyword}%");
                 });
             });
         }
@@ -42,9 +42,8 @@ class IncomingPlanController extends Controller
 
     public function registerForm()
     {
-        $stores = Store::all();
         $products = Product::all();
-        return view('incoming_plans.register', compact('stores', 'products'));
+        return view('incoming_plans.register', compact('products'));
     }
 
     public function register(Request $request)
@@ -72,6 +71,10 @@ class IncomingPlanController extends Controller
 
     public function show($date, $store_id)
     {
+        if ($store_id != Auth::user()->store_id) {
+            abort(403, '自店舗の入荷予定しか閲覧できません。');
+        }
+
         $plans = IncomingPlan::with('product', 'store')
             ->whereDate('planned_date', $date)
             ->where('store_id', $store_id)
@@ -79,26 +82,32 @@ class IncomingPlanController extends Controller
 
         $store = Store::findOrFail($store_id);
 
-        return view('incoming_plans.show', [
-            'plans' => $plans,
-            'date' => $date,
-            'store' => $store,
-        ]);
+        return view('incoming_plans.show', compact('plans', 'date', 'store'));
     }
 
     public function edit($id)
     {
         $plan = IncomingPlan::with('product')->findOrFail($id);
+
+        if ($plan->store_id != Auth::user()->store_id) {
+            abort(403, '自店舗の入荷予定しか編集できません。');
+        }
+
         return view('incoming_plans.edit', compact('plan'));
     }
 
     public function update(Request $request, $id)
     {
+        $plan = IncomingPlan::findOrFail($id);
+
+        if ($plan->store_id != Auth::user()->store_id) {
+            abort(403, '自店舗の入荷予定しか更新できません。');
+        }
+
         $request->validate([
             'quantity' => 'required|integer|min:1',
         ]);
 
-        $plan = IncomingPlan::findOrFail($id);
         $plan->quantity = $request->quantity;
         $plan->weight = $plan->product->weight * $request->quantity;
         $plan->save();
@@ -110,6 +119,11 @@ class IncomingPlanController extends Controller
     public function destroy($id)
     {
         $plan = IncomingPlan::findOrFail($id);
+
+        if ($plan->store_id != Auth::user()->store_id) {
+            abort(403, '自店舗の入荷予定しか削除できません。');
+        }
+
         $plan->delete();
 
         return redirect()->route('incoming-plans.show', ['date' => $plan->planned_date, 'store' => $plan->store_id])
@@ -120,14 +134,16 @@ class IncomingPlanController extends Controller
     {
         $targetPlan = IncomingPlan::findOrFail($id);
 
+        if ($targetPlan->store_id != Auth::user()->store_id) {
+            abort(403, '自店舗の入荷予定しか確定できません。');
+        }
+
         $plans = IncomingPlan::whereDate('planned_date', $targetPlan->planned_date)
             ->where('store_id', $targetPlan->store_id)
             ->get();
 
         foreach ($plans as $plan) {
-            if ($plan->is_confirmed) {
-                continue;
-            }
+            if ($plan->is_confirmed) continue;
 
             $inventory = Inventory::where('store_id', $plan->store_id)
                 ->where('product_id', $plan->product_id)
