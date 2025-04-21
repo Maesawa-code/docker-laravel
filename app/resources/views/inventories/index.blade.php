@@ -4,6 +4,16 @@
 <div class="container py-5">
     <h2 class="mb-4 fw-bold text-center">在庫一覧</h2>
 
+    <!-- 🔍 検索フォーム（商品名・店舗名） -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-8">
+            <form method="GET" action="{{ route('inventories.index') }}" class="input-group">
+                <input type="text" name="keyword" class="form-control" placeholder="商品名・店舗名で検索" value="{{ request('keyword') }}">
+                <button type="submit" class="btn btn-primary fw-bold">検索</button>
+            </form>
+        </div>
+    </div>
+
     <div class="row row-cols-1 row-cols-md-3 g-4">
         @foreach($inventories as $inventory)
             <div class="col">
@@ -29,7 +39,7 @@
                             </div>
                         </div>
 
-                        <!-- 削除ボタン（右側・横並び維持） -->
+                        <!-- 削除ボタン -->
                         <form action="{{ route('inventories.destroy', $inventory->id) }}" method="POST" onsubmit="return confirm('この在庫を削除してもよろしいですか？');" class="ms-3">
                             @csrf
                             @method('DELETE')
