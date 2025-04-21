@@ -13,4 +13,12 @@ class InventoryController extends Controller
         $inventories = Inventory::with('product')->whereNull('deleted_at')->get();
         return view('inventories.index', compact('inventories'));
     }
+
+    public function destroy($id)
+    {
+        $inventory = Inventory::findOrFail($id);
+        $inventory->delete();
+
+        return redirect()->route('inventories.index')->with('success', '在庫を削除しました');
+    }
 }
